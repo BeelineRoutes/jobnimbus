@@ -40,7 +40,7 @@ type Job struct {
     Active bool `json:"is_active,omitempty"`
     Archived bool `json:"is_archived,omitempty"`
     Type string `json:"type,omitempty"`
-    Status int `json:"status,omitempty"`
+    Status JobStatus `json:"status,omitempty"`
     StatusName string `json:"status_name,omitempty"`
     Tags []string `json:"tags,omitempty"`
     SalesRep string `json:"sales_rep"`
