@@ -104,7 +104,7 @@ func (this *Jobnimbus) ListJobs (ctx context.Context, token string, start, end t
 
     params.Set("filter", string(filterJson))
 
-    params.Set("fields", "date_end,date_start,is_active,is_archived,type,status,tags,sales_rep,record_type_name,primary,geo,name,parent_mobile_phone,address_line1,address_line2,city,state_text,zip") // these are really the items we care about
+    params.Set("fields", "date_end,date_start,is_active,is_archived,type,status,tags,sales_rep,sales_rep_name,record_type_name,primary,geo,name,parent_mobile_phone,address_line1,address_line2,city,state_text,zip") // these are really the items we care about
 
     var resp struct {
         Results []*Job
