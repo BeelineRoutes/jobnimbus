@@ -77,7 +77,7 @@ func (this *Jobnimbus) ListTasks (ctx context.Context, token string, start, end 
 
     params.Set("filter", string(filterJson))
 
-    params.Set("fields", "date_end,date_start,is_active,is_archived,is_completed,type,tags,description,owners,record_type_name,title") // these are really the items we care about
+    params.Set("fields", "date_end,date_start,is_active,is_archived,is_completed,type,tags,description,owners,record_type_name,title,related") // these are really the items we care about
 
     var resp struct {
         Results []*Task
