@@ -71,12 +71,11 @@ type contactFilter struct {
  //----- FUNCTIONS -------------------------------------------------------------------------------------------------------//
 //-----------------------------------------------------------------------------------------------------------------------//
 
-// returns all jobs that match our conditions
-// this defaults to 1000 jobs returned, which i'm hoping is enough, so i'm not going to loop through them
-func (this *Jobnimbus) ListContacts (ctx context.Context, token string, searchStreet, searchFirst, searchLast string) ([]*Contact, error) {
+// returns all contacts that match our conditions
+func (this *Jobnimbus) ListContacts (ctx context.Context, token, searchStreet, searchFirst, searchLast string) ([]*Contact, error) {
     params := url.Values{}
 
-    // create our filter for the time range to look for jobs
+    // create our filter for the attributes of the contacts to search for
     filter := &contactFilter{}
     bFilter := boolFilter{}
     
@@ -120,5 +119,20 @@ func (this *Jobnimbus) CreateContact (ctx context.Context, token string, contact
     
     // we're here, we're good
     return resp.Id, nil
+}
+
+// gets the info for a single contact
+func (this *Jobnimbus) SingleContact (ctx context.Context, token, id string) (*Contact, error) {
+    params := url.Values{}
+
+    params.Set("fields", "address_line1,address_line2,city,company,country_name,jnid,display_name,first_name,last_name,email,geo,home_phone,is_active,is_archived,mobile_phone,state_text,tags,zip") // these are really the items we care about
+
+    resp := &Contact{}
+    
+    err := this.send (ctx, 0, http.MethodGet, token, fmt.Sprintf("contacts/%s?%s", id, params.Encode()), nil, resp)
+    if err != nil { return nil, err } // bail
+    
+    // we're here, we're good
+    return resp, nil 
 }
 
