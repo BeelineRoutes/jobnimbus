@@ -92,7 +92,7 @@ func (this *Jobnimbus) ListTasks (ctx context.Context, token string, start, end 
 
 // updates the start/end time for a task
 // the time needs to be set to whatever timezone the user's account is in
-func (this *Jobnimbus) UpdateTaskSchedule (ctx context.Context, token, taskId, salesRep string, startTime time.Time, duration time.Duration) error {
+func (this *Jobnimbus) UpdateTaskSchedule (ctx context.Context, token, taskId string, salesRep []string, startTime time.Time, duration time.Duration) error {
     var data struct {
         DateEnd int64 `json:"date_end"`
         DateStart int64 `json:"date_start"`
@@ -101,7 +101,10 @@ func (this *Jobnimbus) UpdateTaskSchedule (ctx context.Context, token, taskId, s
     
     data.DateEnd = startTime.Add(duration).Unix()
     data.DateStart = startTime.Unix()
-    data.Owners = append(data.Owners, owner { salesRep })
+
+    for _, rep := range salesRep {
+        data.Owners = append(data.Owners, owner { rep })
+    }
 
     err := this.send (ctx, 0, http.MethodPut, token, fmt.Sprintf("tasks/%s", taskId), data, nil)
     if err != nil { return err } // bail
